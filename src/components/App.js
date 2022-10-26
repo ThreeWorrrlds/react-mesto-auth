@@ -25,10 +25,6 @@ function App() {
     setIsAddPlacePopupOpen(true);
   }
 
-  /*   function handleCardClick(linkImg) {
-      setSelectedCard(`${linkImg}`);
-    } */
-
   function closeAllPopups() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
