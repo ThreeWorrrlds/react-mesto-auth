@@ -3,10 +3,9 @@ import { api } from '../utils/Api.js';
 import Card from './Card.js';
 
 function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
-
-  const [userName, setUserName] = React.useState();
-  const [userDescription, setUserDescription] = React.useState();
-  const [userAvatar, setUserAvatar] = React.useState();
+  const [userName, setUserName] = React.useState('');
+  const [userDescription, setUserDescription] = React.useState('');
+  const [userAvatar, setUserAvatar] = React.useState('');
   const [cards, setCards] = React.useState([]);
 
   React.useEffect(() => {
@@ -19,7 +18,7 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
       .catch((err) => {
         console.log('Данные не получены', err);
       })
-  });
+  }, []);
 
   React.useEffect(() => {
     api.getAllCards()
