@@ -57,7 +57,7 @@ export class Api {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({
-        avatar: data.link
+        avatar: data.avatar
       })
     })
       .then((res) => {
@@ -84,7 +84,6 @@ export class Api {
       .then((res) => {
         return this.#onResponce(res);
       })
-
   }
 
   sendUserInfoToServer(data) {
@@ -93,25 +92,13 @@ export class Api {
       headers: this._headers,
       body: JSON.stringify({
         name: data.name,
-        about: data.job
+        about: data.about
       })
     })
       .then((res) => {
         return this.#onResponce(res);
       })
   }
-
 }
-
 const api = new Api(configApi);
 export { api };
-
-/* fetch('https://nomoreparties.co/v1/cohort-51/users/me', {
-  headers: {
-    "authorization": '9800edab-c01e-4941-9a81-bb143e90c5b8',
-    "content-type": "application/json"
-  }
-})
-  .then((res) => {
-    console.log(res)
-  }) */
