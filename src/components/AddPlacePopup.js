@@ -21,6 +21,11 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
     })
   }
 
+  React.useEffect(() => {
+    setName('');
+    setUrlImg('');
+  }, [isOpen]);
+
   return (
     <PopupWithForm name="place" title="Новое место" buttonTxt="Создать" isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit} >
       <input value={name} onChange={handleInputNameChange} id="place-name" type="text" className="popup__input popup__input_type_place-name" name="name"

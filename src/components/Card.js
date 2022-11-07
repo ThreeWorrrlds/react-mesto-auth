@@ -28,7 +28,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
 
   return (
     <article className="card">
-      <img src={card.link} alt="фотография места" className="card__photo" onClick={handleCardClick} />
+      <img src={card.link} alt={card.name} className="card__photo" onClick={handleCardClick} />
       <div className="card__description-group">
         <h2 className="card__place-name">{card.name}</h2>
         <div className="card__likes">

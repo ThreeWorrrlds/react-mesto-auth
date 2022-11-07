@@ -41,11 +41,11 @@ function App() {
     api.createUserCard(card)
       .then((newCard) => {
         setCards([newCard, ...cards]);
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
       })
-    closeAllPopups();
   }
 
   function handleCardLike(card) {
@@ -53,7 +53,10 @@ function App() {
     api.changeLike(card._id, isLiked)
       .then((newCard) => {
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-      });
+      })
+      .catch((err) => {
+        console.log('Данные не получены', err);
+      })
   }
 
   function handleCardDelete(card) {
@@ -61,28 +64,31 @@ function App() {
       .then(() => {
         setCards([...cards].filter((c) => c._id !== card._id));
       })
+      .catch((err) => {
+        console.log('Данные не получены', err);
+      })
   }
 
   function handleUpdateUser(user) {
     api.sendUserInfoToServer(user)
       .then((dataUser) => {
         setCurrentUser(dataUser);
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
       })
-    closeAllPopups();
   }
 
   function handleUpdateAvatar(urlImg) {
     api.changeAvatar(urlImg)
       .then((res) => {
         setCurrentUser(res);
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
       })
-    closeAllPopups();
   }
 
   function handleEditAvatarClick() {
