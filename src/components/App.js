@@ -15,7 +15,7 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [currentUser, setCurrentUser] = useState('');
-  const [cards, setCards] = React.useState([]);
+  const [cards, setCards] = React.useState([]);   //ABCD
 
   React.useEffect(() => {
     api.getUserInfoFromServer()
