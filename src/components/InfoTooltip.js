@@ -1,10 +1,10 @@
 import React from 'react';
-import AuthSuccess from '../images/Auth-success.svg';
-import AuthFailed from '../images/Auth-failed.svg';
+import authSuccess from '../images/Auth-success.svg';
+import authFailed from '../images/Auth-failed.svg';
 
 function InfoTooltip({ isOpen, registerSuccess, onClose }) {
 
-  const icon = registerSuccess === 'success' ? AuthSuccess : AuthFailed;
+  const icon = registerSuccess === 'success' ? authSuccess : authFailed;
   const text = registerSuccess === 'success' ? 'Вы успешно зарегистрировались!' : 'Что-то пошло не так! Попробуйте ещё раз.';
   const altImg = registerSuccess === 'success' ? 'круг с галочкой внутри' : 'круг с крестиком внутри';
 

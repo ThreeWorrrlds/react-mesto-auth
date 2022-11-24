@@ -1,9 +1,7 @@
 import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import * as Auth from './Auth.js';
+import { Link } from 'react-router-dom';
 
 function Register({ handleRegister }) {
-  const history = useHistory();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -17,19 +15,7 @@ function Register({ handleRegister }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (password) {
-      Auth.register(email, password)
-        .then((res) => {
-          handleRegister('success');
-          history.push('/sign-in');
-          console.log('сработал then', res);
-        })
-        .catch((err) => {
-          handleRegister('failed');
-          history.push('/sign-in');
-          console.log('сработал catch', err);
-        })
-    }
+    handleRegister(email, password);
   }
 
   return (

@@ -1,9 +1,7 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
-import * as Auth from './Auth.js';
 
 function Login({ handleLogin }) {
-  const history = useHistory();
+
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -17,21 +15,9 @@ function Login({ handleLogin }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (!email || !password) {
-      return;
-    }
-    Auth.login(email, password)
-      .then((data) => {
-        if (data.token) {
-          setEmail('');
-          setPassword('');
-          handleLogin();
-          history.push('/');
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+    handleLogin(email, password);
+    setEmail('');
+    setPassword('');
   }
 
   return (

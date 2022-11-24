@@ -13,18 +13,18 @@ import Login from './Login.js';
 import Register from './Register.js';
 import InfoTooltip from './InfoTooltip.js';
 import ProtectedRoute from './ProtectedRoute.js';
-import * as Auth from './Auth.js';
+import * as auth from '../utils/auth.js';
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
-  const [currentUser, setCurrentUser] = useState('');
+  const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = React.useState([]);   //ABCD
   const [loggedIn, setLoggedIn] = useState(false);
 
-  const [registerSuccess, setRegisterSuccess] = useState();
+  const [registerSuccess, setRegisterSuccess] = useState(null);
   const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState(false);
 
   const [emailProfile, setEmailProfile] = useState('');
@@ -53,13 +53,16 @@ function App() {
   function checkToken() {
     const token = localStorage.getItem('token');
     if (token) {
-      Auth.getContent(token)
+      auth.getContent(token)
         .then((res) => {
           if (res) {
             setLoggedIn(true);
-            history.push('/');
             setEmailProfile(res.data.email);
+            history.push('/');
           }
+        })
+        .catch((err) => {
+          console.log('checkToken', err);
         })
     }
   }
@@ -121,16 +124,37 @@ function App() {
       })
   }
 
-  function handleRegister(result) {
-    setIsRegisterPopupOpen(true);
-    if (result === 'success') {
-      setRegisterSuccess(result);
-    } else {
-      setRegisterSuccess(result);
+  function handleRegister(email, password) {
+    if (email && password) {
+      auth.register(email, password)
+        .then((res) => {
+          setRegisterSuccess('success');
+          history.push('/sign-in');
+        })
+        .catch((err) => {
+          setRegisterSuccess('failed');
+          console.log(err);
+        })
     }
+    setIsRegisterPopupOpen(true);
   }
 
-  function handleLogin() {
+  function handleLogin(email, password) {
+    if (!email || !password) {
+      return;
+    }
+    auth.login(email, password)
+      .then((data) => {
+        if (data.token) {
+          history.push('/');
+          setEmailProfile(email);
+          console.log(data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+
     setLoggedIn(true);
   }
 
@@ -171,6 +195,11 @@ function App() {
           <Route path='/sign-up'>
             <Header />
             <Register handleRegister={handleRegister} />
+            <InfoTooltip
+              registerSuccess={registerSuccess}
+              isOpen={isRegisterPopupOpen}
+              onClose={closeAllPopups}
+            />
           </Route>
 
           <Route exact path='/'>
@@ -196,7 +225,6 @@ function App() {
           <Route>
             {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
           </Route>
-
         </Switch>
       </CurrentUserContext.Provider>
     </div>

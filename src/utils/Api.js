@@ -1,12 +1,4 @@
-const configApi = {
-  urlCards: 'https://mesto.nomoreparties.co/v1/cohort-51/cards',
-  urlUser: 'https://nomoreparties.co/v1/cohort-51/users/me',
-  urlAvatar: 'https://mesto.nomoreparties.co/v1/cohort-51/users/me/avatar',
-  headers: {
-    "authorization": '9800edab-c01e-4941-9a81-bb143e90c5b8',
-    "content-type": "application/json"
-  }
-}
+export const BASE_URL = 'https://mesto.nomoreparties.co/v1/cohort-51';
 
 export class Api {
   #onResponce(res) {
@@ -16,15 +8,13 @@ export class Api {
     return Promise.reject("Ошибка", `${res}`);
   }
 
-  constructor(config) {
-    this._urlCards = config.urlCards;
-    this._urlAvatar = config.urlAvatar;
-    this._urlUser = config.urlUser;
-    this._headers = config.headers;
+  constructor(baseUrl, headers) {
+    this._headers = headers.headers;
+    this._baseUrl = baseUrl;
   }
 
   getAllCards() {
-    return fetch(this._urlCards, {
+    return fetch(`${this._baseUrl}/cards`, {
       headers: this._headers
     })
       .then((res) => {
@@ -33,7 +23,7 @@ export class Api {
   }
 
   deleteCard(cardId) {
-    return fetch(`${this._urlCards}/${cardId}`, {
+    return fetch(`${this._baseUrl}/cards/${cardId}`, {
       method: 'DELETE',
       headers: this._headers
     })
@@ -43,7 +33,7 @@ export class Api {
   }
 
   changeLike(cardId, isLike) {
-    return fetch(`${this._urlCards}/${cardId}/likes`, {
+    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: isLike ? 'DELETE' : 'PUT',
       headers: this._headers
     })
@@ -53,7 +43,7 @@ export class Api {
   }
 
   changeAvatar(data) {
-    return fetch(this._urlAvatar, {
+    return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({
@@ -66,7 +56,7 @@ export class Api {
   }
 
   createUserCard(data) {
-    return fetch(this._urlCards, {
+    return fetch(`${this._baseUrl}/cards`, {
       method: 'POST',
       headers: this._headers,
       body: JSON.stringify({
@@ -80,14 +70,14 @@ export class Api {
   }
 
   getUserInfoFromServer() {
-    return fetch(this._urlUser, { headers: this._headers })
+    return fetch(`${this._baseUrl}/users/me`, { headers: this._headers })
       .then((res) => {
         return this.#onResponce(res);
       })
   }
 
   sendUserInfoToServer(data) {
-    return fetch(this._urlUser, {
+    return fetch(`${this._baseUrl}/users/me`, {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({
@@ -100,5 +90,11 @@ export class Api {
       })
   }
 }
-const api = new Api(configApi);
+const api = new Api(BASE_URL,
+  {
+    headers: {
+      "authorization": '9800edab-c01e-4941-9a81-bb143e90c5b8',
+      "content-type": "application/json"
+    }
+  });
 export { api };

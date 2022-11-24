@@ -30,14 +30,6 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, cards, onC
             onCardDelete={onCardDelete} />
         ))}
       </section>
-
-      <div className="popup popup-allow-delete">
-        <form className="popup__container">
-          <h2 className="popup__description description-allow-delete">Вы уверены?</h2>
-          <button type="submit" className="popup__button-save popup__button-save_card_delete">Да</button>
-          <button type="button" className="popup__button-close button-style"></button>
-        </form>
-      </div>
     </main>
   );
 }
