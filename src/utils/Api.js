@@ -13,50 +13,43 @@ export class Api {
     this._baseUrl = baseUrl;
   }
 
+  _request(url, options) {
+    return fetch(url, options).then(this.#onResponce)
+  }
+
+
   getAllCards() {
-    return fetch(`${this._baseUrl}/cards`, {
+    return this._request(`${this._baseUrl}/cards`, {
       headers: this._headers
     })
-      .then((res) => {
-        return this.#onResponce(res);
-      })
   }
 
   deleteCard(cardId) {
-    return fetch(`${this._baseUrl}/cards/${cardId}`, {
+    return this._request(`${this._baseUrl}/cards/${cardId}`, {
       method: 'DELETE',
       headers: this._headers
     })
-      .then((res) => {
-        return this.#onResponce(res);
-      })
   }
 
   changeLike(cardId, isLike) {
-    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+    return this._request(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: isLike ? 'DELETE' : 'PUT',
       headers: this._headers
     })
-      .then((res) => {
-        return this.#onResponce(res);
-      })
   }
 
   changeAvatar(data) {
-    return fetch(`${this._baseUrl}/users/me/avatar`, {
+    return this._request(`${this._baseUrl}/users/me/avatar`, {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({
         avatar: data.avatar
       })
     })
-      .then((res) => {
-        return this.#onResponce(res);
-      })
   }
 
   createUserCard(data) {
-    return fetch(`${this._baseUrl}/cards`, {
+    return this._request(`${this._baseUrl}/cards`, {
       method: 'POST',
       headers: this._headers,
       body: JSON.stringify({
@@ -64,20 +57,14 @@ export class Api {
         link: data.link
       })
     })
-      .then((res) => {
-        return this.#onResponce(res);
-      })
   }
 
   getUserInfoFromServer() {
-    return fetch(`${this._baseUrl}/users/me`, { headers: this._headers })
-      .then((res) => {
-        return this.#onResponce(res);
-      })
+    return this._request(`${this._baseUrl}/users/me`, { headers: this._headers })
   }
 
   sendUserInfoToServer(data) {
-    return fetch(`${this._baseUrl}/users/me`, {
+    return this._request(`${this._baseUrl}/users/me`, {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({
@@ -85,9 +72,6 @@ export class Api {
         about: data.about
       })
     })
-      .then((res) => {
-        return this.#onResponce(res);
-      })
   }
 }
 const api = new Api(BASE_URL,

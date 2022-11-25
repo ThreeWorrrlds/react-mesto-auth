@@ -1,9 +1,12 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm.js';
 
-function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
+function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
   const [name, setName] = React.useState('');
   const [urlImg, setUrlImg] = React.useState('');
+
+  let buttonText = isLoading ? 'Создание...' : 'Создать';
+
 
   function handleInputNameChange(e) {
     setName(e.target.value);
@@ -27,7 +30,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
   }, [isOpen]);
 
   return (
-    <PopupWithForm name="place" title="Новое место" buttonTxt="Создать" isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit} >
+    <PopupWithForm name="place" title="Новое место" buttonTxt={buttonText} isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit} >
       <input value={name} onChange={handleInputNameChange} id="place-name" type="text" className="popup__input popup__input_type_place-name" name="name"
         placeholder="Название" minLength="2" maxLength="30" required />
       <span className="popup__text-error place-name-error"></span>

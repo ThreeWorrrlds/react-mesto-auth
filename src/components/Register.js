@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useForm } from '../hooks/useForm.js';
 
 function Register({ handleRegister }) {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  /*   const { values, handleChange, setValues } = useForm({});
+    console.log(values)
+    useForm({ email, password }); 
+   handleChange(e.target.value);*/
 
   function handleInputEmailChange(e) {
     setEmail(e.target.value);
@@ -19,7 +25,7 @@ function Register({ handleRegister }) {
   }
 
   return (
-    <form className="login__form" autoComplete="off" noValidate onSubmit={handleSubmit}>
+    <form className="login__form" autoComplete="off" onSubmit={handleSubmit}>
       <h2 className="login__header">Регистрация</h2>
       <input value={email} onChange={handleInputEmailChange} id="email" type="email" className="login__input" name="email"
         placeholder="Email" minLength="5" maxLength="30" required />

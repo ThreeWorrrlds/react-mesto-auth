@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import Header from './Header.js';
 import Main from './Main.js';
@@ -30,7 +30,25 @@ function App() {
   const [emailProfile, setEmailProfile] = useState('');
   const history = useHistory();
 
-  React.useEffect(() => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || selectedCard || isRegisterPopupOpen;
+
+  useEffect(() => {
+    function closeByEscape(evt) {
+      if (evt.key === 'Escape') {
+        closeAllPopups();
+      }
+    }
+    if (isOpen) { // навешиваем только при открытии
+      document.addEventListener('keydown', closeByEscape);
+      return () => {
+        document.removeEventListener('keydown', closeByEscape);
+      }
+    }
+  }, [isOpen])
+
+  useEffect(() => {
     api.getUserInfoFromServer()
       .then((dataUser) => {
         setCurrentUser(dataUser);
@@ -40,7 +58,7 @@ function App() {
       })
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     api.getAllCards()
       .then((dataCards) => {
         setCards(dataCards);
@@ -66,18 +84,22 @@ function App() {
         })
     }
   }
-  React.useEffect(() => {
+  useEffect(() => {
     checkToken();
   }, [])
 
   function handleAddPlaceSubmit(card) {
+    setIsLoading(true);
     api.createUserCard(card)
       .then((newCard) => {
         setCards([newCard, ...cards]);
-        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        closeAllPopups();
       })
   }
 
@@ -103,24 +125,32 @@ function App() {
   }
 
   function handleUpdateUser(user) {
+    setIsLoading(true);
     api.sendUserInfoToServer(user)
       .then((dataUser) => {
         setCurrentUser(dataUser);
-        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        closeAllPopups();
       })
   }
 
   function handleUpdateAvatar(urlImg) {
+    setIsLoading(true);
     api.changeAvatar(urlImg)
       .then((res) => {
         setCurrentUser(res);
-        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        closeAllPopups();
       })
   }
 
@@ -135,8 +165,10 @@ function App() {
           setRegisterSuccess('failed');
           console.log(err);
         })
+        .finally(() => {
+          setIsRegisterPopupOpen(true);
+        })
     }
-    setIsRegisterPopupOpen(true);
   }
 
   function handleLogin(email, password) {
@@ -147,6 +179,7 @@ function App() {
       .then((data) => {
         if (data.token) {
           history.push('/');
+          setLoggedIn(true);
           setEmailProfile(email);
           console.log(data);
         }
@@ -154,8 +187,6 @@ function App() {
       .catch((err) => {
         console.log(err);
       })
-
-    setLoggedIn(true);
   }
 
   function handleEditAvatarClick() {
@@ -217,9 +248,9 @@ function App() {
             />
             <ImagePopup card={selectedCard} onClose={closeAllPopups} />
             <Footer />
-            <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
-            <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
-            <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
+            <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} isLoading={isLoading} />
+            <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} isLoading={isLoading} />
+            <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} isLoading={isLoading} />
           </Route>
 
           <Route>

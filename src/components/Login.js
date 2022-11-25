@@ -5,6 +5,11 @@ function Login({ handleLogin }) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
+  React.useEffect(() => {
+    setEmail('');
+    setPassword('');
+  }, []);
+
   function handleInputEmailChange(e) {
     setEmail(e.target.value);
   }
@@ -16,12 +21,10 @@ function Login({ handleLogin }) {
   function handleSubmit(e) {
     e.preventDefault();
     handleLogin(email, password);
-    setEmail('');
-    setPassword('');
   }
 
   return (
-    <form className="login__form" autoComplete="off" noValidate onSubmit={handleSubmit} >
+    <form className="login__form" autoComplete="off" onSubmit={handleSubmit} >
       <h2 className="login__header">Вход</h2>
       <input value={email} onChange={handleInputEmailChange} id="email" type="email" className="login__input" name="email"
         placeholder="Email" minLength="3" maxLength="30" required />
