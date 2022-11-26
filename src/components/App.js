@@ -93,13 +93,13 @@ function App() {
     api.createUserCard(card)
       .then((newCard) => {
         setCards([newCard, ...cards]);
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
         setIsLoading(false);
-        closeAllPopups();
       })
   }
 
@@ -129,13 +129,13 @@ function App() {
     api.sendUserInfoToServer(user)
       .then((dataUser) => {
         setCurrentUser(dataUser);
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
         setIsLoading(false);
-        closeAllPopups();
       })
   }
 
@@ -144,13 +144,13 @@ function App() {
     api.changeAvatar(urlImg)
       .then((res) => {
         setCurrentUser(res);
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
         setIsLoading(false);
-        closeAllPopups();
       })
   }
 
